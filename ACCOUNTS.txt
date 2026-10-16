@@ -1,0 +1,19 @@
+GradePredict AI - seeded accounts
+Keep this file out of the project folder / web root.
+
+ROLE      NAME              EMAIL                              PASSWORD
+Admin     John Doe          admin@gradepredict.ai              admin123
+Teacher   Maria Cruz        teacher@gradepredict.ai            teacher123
+Student   Juan Dela Cruz    juan@student.gradepredict.ai       student123
+Student   Kevin Bautista    kevin@student.gradepredict.ai      student123
+Student   Maria Santos      maria@student.gradepredict.ai      student123
+Student   Pedro Reyes       pedro@student.gradepredict.ai      student123
+Student   Ana Lopez         ana@student.gradepredict.ai        student123
+Student   Luis Garcia       luis@student.gradepredict.ai       student123
+Parent    Roberto Dela Cruz parent@gradepredict.ai             parent123
+
+These are already approved, so they sign in normally. Anyone who registers
+from now on starts as "pending" and cannot sign in until an admin, a teacher,
+or someone an admin has given permission approves them (Approvals in the sidebar).
+
+Change these passwords before using the system with real data.

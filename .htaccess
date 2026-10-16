@@ -1,0 +1,53 @@
+Options -Indexes
+
+<IfModule mod_php.c>
+    php_flag display_errors On
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Deny direct access to files that should never be served, even if someone
+# guesses the path (source-level protection to back up the OS-level one on
+# data/ and uploads/avatars/ which already have their own .htaccess).
+# ---------------------------------------------------------------------------
+<FilesMatch "\.(sql|log|md|env)$">
+    Require all denied
+</FilesMatch>
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# ---------------------------------------------------------------------------
+# Caching: images and fonts never change under the same name, so they are cached
+# for a year. CSS and JavaScript are the files that change while the app is being
+# worked on, so they are revalidated on every load (a quick 304 when unchanged).
+# Pages also link them through asset_url(), which adds ?v=<file time>, so an edited
+# file is always fetched fresh. Never mark CSS/JS "immutable": a browser that cached
+# an old copy would keep it for the whole period and show new pages with old styles.
+# ---------------------------------------------------------------------------
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+</IfModule>
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+    <FilesMatch "\.(png|jpe?g|ico|woff2?)$">
+        Header set Cache-Control "public, max-age=31536000"
+    </FilesMatch>
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Lightweight request filtering (defense in depth only — the real SQL
+# injection / XSS protection is parameterized queries + htmlspecialchars()
+# throughout the app, not this). Blocks a few obviously malicious query
+# string patterns before PHP even runs. A real WAF (e.g. ModSecurity,
+# Cloudflare) belongs at the hosting/network layer, not in app code.
+# ---------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{QUERY_STRING} (\.\./|<script|union.+select|base64_(en|de)code) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>

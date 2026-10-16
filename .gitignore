@@ -1,0 +1,4 @@
+data/*
+!data/.htaccess
+uploads/avatars/*
+!uploads/avatars/.htaccess

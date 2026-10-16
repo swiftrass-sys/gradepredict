@@ -1,0 +1,10 @@
+# Defense in depth: even though uploaded files are validated as images server-side,
+# never allow anything in this folder to execute as a script.
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|cgi|sh)$">
+    Require all denied
+</FilesMatch>
+Options -ExecCGI
+AddType text/plain .php .phtml .pl .py .cgi .sh
